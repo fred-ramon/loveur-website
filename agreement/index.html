@@ -268,6 +268,7 @@ function attachFile(f,dataUrl,name,type,field){
   var file=new File([u],name,{type:type}),dt=new DataTransfer();dt.items.add(file);
   var fi=document.createElement('input');fi.type='file';fi.name=field;fi.files=dt.files;f.appendChild(fi);
 }
+function sigSmall(){var w=Math.min(600,c.width),h=Math.round(c.height*w/c.width),o=document.createElement('canvas');o.width=w;o.height=h;var g=o.getContext('2d');g.drawImage(c,0,0,w,h);return o.toDataURL('image/png')}
 function sendIt(rec){
   var f=document.createElement('form');f.method='POST';f.action='https://formsubmit.co/fred@ramon.net';f.enctype='multipart/form-data';f.style.display='none';
   var add=function(n,v){var i=document.createElement(n==='_autoresponse'||n==='Terms'||n==='Summary'?'textarea':'input');if(i.tagName==='INPUT')i.type='hidden';i.name=n;i.value=v;f.appendChild(i)};
@@ -283,6 +284,7 @@ function sendIt(rec){
   if(rec.agreementPdf){try{attachFile(f,rec.agreementPdf,rec.id+'-agreement.pdf','application/pdf','attachment')}catch(_){}}
   if(rec.signatureImage){try{attachFile(f,rec.signatureImage,rec.id+'-signature.png','image/png','attachment2')}catch(_){}}
   document.body.appendChild(f);f.submit();
+  setTimeout(function(){var m=$('msg');m.textContent='This is taking longer than usual. Your agreement was saved; if nothing changes in a minute, please let Fred know your reference '+rec.id+'.';show(m)},25000);
 }
 (function(){var q=new URLSearchParams(location.search).get('sent');if(!q)return;try{var r=JSON.parse(sessionStorage.getItem('luw_last')||'null');if(r&&r.id===q)render(r)}catch(_){}})();
 $('f').addEventListener('submit',async function(e){
@@ -298,7 +300,7 @@ $('f').addEventListener('submit',async function(e){
   }
   m.style.display='none';
   var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
-  rec.signatureImage=drawn?c.toDataURL('image/png'):null;
+  rec.signatureImage=drawn?sigSmall():null;
   rec.signedAt=new Date().toLocaleString('en-US',{timeZone:'America/New_York',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
   try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
   try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(_){}
