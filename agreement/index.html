@@ -74,6 +74,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <p class="note"><b>TEST MODE:</b> nothing was sent, saved, or charged. This is what a real submission would have captured.</p>
 <div class="ref" id="d_ref"></div>
 <dl id="d_sum"></dl>
+<div id="d_sigwrap" style="display:none;margin-top:14px"><p class="note" style="margin:0 0 6px"><b>Drawn signature</b></p><img id="d_sig" alt="Drawn signature" style="width:100%;max-width:420px;border:1px solid var(--line);border-radius:10px;background:#fff"></div>
 <button type="button" class="btn" id="again">Start over</button>
 </div>
 </div>
@@ -136,7 +137,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <label class="opt" style="margin-top:0"><input type="checkbox" id="agree" required><span>I have read and agree to these terms and the payment schedule above.</span></label>
 <label for="typed">Type your full name as your signature</label>
 <input type="text" id="typed" autocomplete="off" required>
-<label>Or sign with your finger or mouse (optional)</label>
+<label>Also sign with your finger or stylus (optional)</label>
 <canvas id="sig" class="sig" aria-label="Signature box"></canvas>
 <button type="button" class="btn alt" id="clr">Clear signature</button>
 <p class="note" style="margin-top:14px">Date: <b id="today"></b></p>
@@ -192,6 +193,8 @@ $('f').addEventListener('submit',function(e){
   var rows=[['Business',rec.business],['Name',rec.name],['Email',rec.email],['Phone',rec.phone],['Add-ons',rec.addons.length?rec.addons.join(', '):'None'],['Update support',rec.support?'Yes, $29/mo':'No'],['Project total',rec.total],['Deposit',rec.deposit],['Balance',rec.balance],['Signed as',rec.signedAs+(rec.drawn?' (and drawn signature)':'')],['Date',rec.date]];
   $('d_sum').innerHTML='';
   rows.forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];$('d_sum').appendChild(dt);$('d_sum').appendChild(dd)});
+  rec.signatureImage=drawn?c.toDataURL('image/png'):null;
+  if(drawn){$('d_sig').src=rec.signatureImage;$('d_sigwrap').style.display='block'}else{$('d_sigwrap').style.display='none'}
   $('f').style.display='none';$('h1').style.display='none';$('lede').style.display='none';
   var d=$('done');d.style.display='block';window.scrollTo(0,0);try{d.focus({preventScroll:true})}catch(_){}
  }catch(err){
