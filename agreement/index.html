@@ -199,7 +199,7 @@ function sendIt(rec){
   add('_template','box');
   add('_next',location.origin+location.pathname+'?sent='+encodeURIComponent(rec.id));
   add('_honey','');
-  add('_autoresponse','Thank you for your business! We\'ll get to work. Here is a copy of the agreement you signed with love ur website (Fred Ramon).\n\n'+summaryText(rec)+'\n\nTERMS YOU AGREED TO\n'+termsText()+'\n\nQuestions? Reply to fred@ramon.net or call or text (954) 401-7111.');
+  add('_autoresponse','Thank you for your business! We\'ll get to work. Here is a copy of the agreement you signed with love ur website (Fred Ramon).\n\n'+summaryText(rec)+'\n\nTERMS YOU AGREED TO\n'+termsText()+'\n\nQuestions? Email fred@ramon.net.');
   add('Reference',rec.id);add('Mode',rec.mode);add('name',rec.name);add('email',rec.email);add('Business',rec.business);add('Phone',rec.phone);
   add('Add-ons',rec.addons.length?rec.addons.join(', '):'None');add('Update support',rec.support?'Yes, $29/mo':'No');
   add('Project total',rec.total);add('Deposit',rec.deposit);add('Balance',rec.balance);add('Terms agreed','Yes');add('Typed signature',rec.signedAs);add('Drawn signature',rec.drawn?'Yes, attached':'None');add('Date',rec.date);
