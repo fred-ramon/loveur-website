@@ -206,9 +206,9 @@ function makePdf(rec){
   doc.setFillColor(20,33,61);doc.rect(0,0,612,76,'F');
   doc.setFillColor(217,65,31);doc.rect(0,76,612,3,'F');
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(20);
-  doc.text('Love UR Website - Website Agreement',L,40);
+  doc.setFillColor(217,65,31);doc.circle(L+6.5,29,6.5,'F');doc.circle(L+19.5,29,6.5,'F');doc.triangle(L+0.4,31.5,L+25.6,31.5,L+13,45,'F');doc.setTextColor(255,255,255);doc.text('Love UR Website - Website Agreement',L+36,40);
   doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(214,222,235);
-  doc.text('Website design and build by Fred Ramon',L,58);
+  doc.text('Website design and build by Fred Ramon',L+36,58);
   if(rec.mode==='TEST'){doc.setFillColor(255,248,214);doc.setDrawColor(201,164,0);doc.setLineWidth(1);doc.roundedRect(R-150,48,150,18,3,3,'FD');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(140,90,0);doc.text('TEST MODE - NOT A REAL ORDER',R-75,60,{align:'center'})}
   y=98;
   // details box, 2x2
