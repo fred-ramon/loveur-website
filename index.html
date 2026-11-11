@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A simple website for your Davie business | Fred Ramon</title>
+<meta name="description" content="Quick, mobile-friendly Wix websites for Davie, Florida small businesses. $500 standard site, first draft in about 48 hours, and you own it.">
+<meta name="theme-color" content="#14213d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2314213d'/%3E%3Cpath d='M50 76S22 58 22 40a14 14 0 0 1 28-4 14 14 0 0 1 28 4c0 18-28 36-28 36z' fill='%23ff6b4a'/%3E%3C/svg%3E">
+<style>
+:root{
+  --navy:#14213d;--ink:#1b2438;--muted:#4a5568;--bg:#fbf8f3;--card:#ffffff;
+  --line:#e6dfd3;--accent:#d9411f;--accent-dark:#b5340f;--soft:#fff1ec;--ok:#1d6b43;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:19px;line-height:1.6;
+  padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+a{color:var(--accent-dark)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;color:var(--navy);letter-spacing:-.01em}
+h1{font-size:clamp(2.1rem,6.6vw,3.4rem)}
+h2{font-size:clamp(1.65rem,4.6vw,2.2rem)}
+h3{font-size:1.25rem}
+p{margin:0 0 1em}
+ul{margin:0 0 1em;padding-left:1.25em}
+li{margin-bottom:.5em}
+
+/* top bar */
+.top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
+.brand{color:#fff;text-decoration:none;font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:10px}
+.brand svg{width:28px;height:28px;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 28px;border-radius:14px;
+  font-size:1.1rem;font-weight:700;text-decoration:none;background:var(--accent);color:#fff;border:2px solid var(--accent);text-align:center}
+.btn:active{background:var(--accent-dark)}
+.btn.alt{background:#fff;color:var(--navy);border-color:var(--navy)}
+.top .btn{min-height:48px;padding:0 20px;font-size:1rem}
+
+/* hero */
+.hero{background:linear-gradient(180deg,var(--navy) 0,#1f3160 100%);color:#fff;padding:44px 0 56px}
+.hero h1{color:#fff}
+.hero p.lead{font-size:1.3rem;max-width:34em;color:#e8ecf5}
+.hero .tag{display:inline-block;background:rgba(255,255,255,.14);padding:6px 14px;border-radius:99px;font-size:.95rem;margin-bottom:18px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:26px}
+.hero .btn.alt{background:transparent;color:#fff;border-color:#fff}
+.facts{display:grid;grid-template-columns:1fr;gap:12px;margin-top:34px}
+.fact{background:rgba(255,255,255,.1);border-radius:var(--r);padding:16px 20px}
+.fact b{display:block;font-size:1.6rem;color:#fff}
+.fact span{color:#dfe5f2;font-size:1rem}
+
+/* sections */
+section{padding:52px 0}
+section.alt{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.eyebrow{font-size:.9rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent-dark);font-weight:700;margin-bottom:8px}
+.cols{display:grid;grid-template-columns:1fr;gap:22px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:24px}
+section.alt .card{background:var(--bg)}
+.card h3{margin-top:0}
+.check{list-style:none;padding:0}
+.check li{padding-left:36px;position:relative}
+.check li::before{content:"";position:absolute;left:0;top:.2em;width:24px;height:24px;border-radius:50%;background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat}
+.price{font-size:3rem;font-weight:800;color:var(--navy);line-height:1}
+.price small{font-size:1.1rem;font-weight:600;color:var(--muted)}
+.note{font-size:.95rem;color:var(--muted)}
+.callout{background:var(--soft);border-left:6px solid var(--accent);border-radius:12px;padding:16px 20px;margin:20px 0 0}
+.callout p:last-child{margin:0}
+
+/* steps */
+.steps{list-style:none;padding:0;margin:0;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:4px 0 22px 62px;margin:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:0;width:46px;height:46px;border-radius:50%;background:var(--navy);color:#fff;
+  font-weight:800;font-size:1.2rem;display:flex;align-items:center;justify-content:center}
+.steps li::after{content:"";position:absolute;left:22px;top:50px;bottom:4px;width:2px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps b{display:block;font-size:1.15rem;color:var(--navy)}
+
+/* Wix table */
+.plans{display:grid;grid-template-columns:1fr;gap:14px;margin:20px 0}
+.plan{background:var(--card);border:2px solid var(--line);border-radius:var(--r);padding:18px 22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.plan.pick{border-color:var(--accent)}
+.plan h3{margin:0 0 2px}
+.plan .p{font-size:1.8rem;font-weight:800;color:var(--navy);white-space:nowrap}
+.plan .p small{font-size:1rem;font-weight:600;color:var(--muted)}
+.plan p{margin:0;font-size:1rem;color:var(--muted)}
+
+/* FAQ */
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:12px}
+summary{cursor:pointer;list-style:none;padding:18px 56px 18px 20px;min-height:60px;font-weight:700;font-size:1.1rem;color:var(--navy);position:relative;display:flex;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";position:absolute;right:20px;top:50%;transform:translateY(-50%);font-size:1.8rem;color:var(--accent-dark);font-weight:700}
+details[open] summary::after{content:"\2212"}
+details .a{padding:0 20px 18px}
+details .a p:last-child{margin:0}
+
+/* contact */
+.contact{background:var(--navy);color:#fff;text-align:center}
+.contact h2{color:#fff}
+.contact p{color:#e8ecf5;max-width:32em;margin-left:auto;margin-right:auto}
+.contact .btns{display:flex;flex-direction:column;gap:14px;max-width:420px;margin:24px auto 0}
+.contact .btn.alt{background:#fff;color:var(--navy)}
+.ph{background:rgba(255,255,255,.14);padding:2px 8px;border-radius:6px;font-weight:700}
+footer{padding:26px 0 34px;font-size:.95rem;color:var(--muted);text-align:center}
+
+/* iPad portrait and up: two columns */
+@media (min-width:700px){
+  body{font-size:20px}
+  .wrap{padding:0 36px}
+  .hero{padding:64px 0 72px}
+  .facts{grid-template-columns:repeat(3,1fr)}
+  .cols{grid-template-columns:1fr 1fr;gap:28px}
+  .cols.three{grid-template-columns:1fr 1fr}
+  .plans{grid-template-columns:1fr}
+  .contact .btns{flex-direction:row;max-width:none;justify-content:center}
+  .contact .btn{min-width:260px}
+  section{padding:68px 0}
+}
+@media (min-width:1000px){
+  .cols.three{grid-template-columns:repeat(3,1fr)}
+  .plans{grid-template-columns:repeat(3,1fr)}
+  .plan{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:420px){
+  .top .brand .loc{display:none}
+  .hero .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Fred Ramon, home">
+      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#fff" opacity=".14"/><path d="M50 76S22 58 22 40a14 14 0 0 1 28-4 14 14 0 0 1 28 4c0 18-28 36-28 36z" fill="#ff6b4a"/></svg>
+      <span>Fred Ramon<span class="loc"> · Davie, FL</span></span>
+    </a>
+    <a class="btn" href="#contact">Contact me</a>
+  </div>
+</header>
+
+<main id="top">
+
+<div class="hero">
+  <div class="wrap">
+    <span class="tag">Websites for Davie small businesses</span>
+    <h1>A simple website for your Davie business.</h1>
+    <p class="lead">I live here in Davie. I build clear, mobile-friendly websites for local shops, salons, restaurants, and service businesses, so when someone searches for you, they find your hours, what you do, and how to reach you.</p>
+    <div class="cta">
+      <a class="btn" href="#contact">Talk to Fred</a>
+      <a class="btn alt" href="#included">See what's included</a>
+    </div>
+    <div class="facts">
+      <div class="fact"><b>$500</b><span>Standard site, one price</span></div>
+      <div class="fact"><b>About 48 hours</b><span>To a first draft, once I have your info</span></div>
+      <div class="fact"><b>You own it</b><span>I transfer it to your own Wix account</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="included">
+  <div class="wrap">
+    <div class="eyebrow">What you get</div>
+    <h2>What's included in the $500</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Your website</h3>
+        <ul class="check">
+          <li><b>3 to 5 pages</b> that look good on a phone, usually Home, About, Services (or menu), and Contact.</li>
+          <li><b>A contact form</b> that emails you when someone writes in.</li>
+          <li><b>Basic search setup:</b> page titles, descriptions, and your name, address, and phone.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Getting you found and getting it right</h3>
+        <ul class="check">
+          <li><b>Google Business Profile setup or cleanup:</b> hours, photos, website link, and categories. Google may still ask you to verify the listing yourself.</li>
+          <li><b>One round of revisions</b> after you see the first draft.</li>
+          <li><b>A preview link</b> to look at before anything goes live.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <p><b>What this isn't:</b> a custom-coded app, a full online store, or a promise that you'll be #1 on Google. It's a clean, professional site that's easy to use on a phone, with your information in one place.</p>
+    </div>
+  </div>
+</section>
+
+<section class="alt" id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">Pricing</div>
+    <h2>Simple, honest pricing</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Standard site</h3>
+        <div class="price">$500 <small>one time</small></div>
+        <p style="margin-top:14px">Covers the design and build of everything listed above.</p>
+        <p class="note">It does not include your Wix plan or a domain name. Those are paid to Wix directly. See below for the current prices.</p>
+      </div>
+      <div class="card">
+        <h3>Optional add-ons</h3>
+        <div class="price">$150 <small>each</small></div>
+        <ul style="margin-top:14px">
+          <li>Custom domain setup, like yourshopdavie.com (domain billed at cost)</li>
+          <li>Photo cleanup and a simple gallery (you supply the photos)</li>
+          <li>Online booking button or basic Wix Bookings</li>
+          <li>Online menu with prices, or a PDF menu you can swap</li>
+          <li>Extra pages, like catering or a second location</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note" style="margin-top:18px">Payment terms go in writing before work starts. Typically that's a deposit to begin and the balance when you approve the site.</p>
+  </div>
+</section>
+
+<section id="ownership">
+  <div class="wrap">
+    <div class="eyebrow">Ownership</div>
+    <h2>You own your website</h2>
+    <p>I build it, then I transfer it into your own Wix account. After that it's yours. I won't keep your site hostage.</p>
+    <ol class="steps" style="margin-top:26px">
+      <li><b>You create a free Wix account</b>Use an email you control. I'll help you through it.</li>
+      <li><b>I build and you approve the site</b>You see the preview and get one round of revisions.</li>
+      <li><b>I transfer it to your account</b>Wix emails you, and you accept the transfer. The invitation expires in 3 days, so it's best to do it while we're talking.</li>
+      <li><b>You pick your Wix plan and domain</b>You enter your own card with Wix. I can sit with you while you do it.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="alt" id="wix">
+  <div class="wrap">
+    <div class="eyebrow">What you pay Wix</div>
+    <h2>Your Wix plan, paid to Wix directly</h2>
+    <p>To use your own domain name and remove Wix ads, your site needs a paid Wix plan. You pay that to Wix, not to me. For a simple business site, Light is usually enough.</p>
+    <div class="plans">
+      <div class="plan pick">
+        <div><h3>Light</h3><p>Usually enough for a simple business site</p></div>
+        <div class="p">$17<small>/month</small></div>
+      </div>
+      <div class="plan">
+        <div><h3>Core</h3><p>Often the step up for bookings or payments</p></div>
+        <div class="p">$29<small>/month</small></div>
+      </div>
+      <div class="plan">
+        <div><h3>Business</h3><p>For bigger needs</p></div>
+        <div class="p">$39<small>/month</small></div>
+      </div>
+    </div>
+    <ul>
+      <li>These are Wix's yearly-billing prices, per month, checked on <b>November 10, 2026</b>.</li>
+      <li>Most yearly plans include a <b>free domain for the first year</b> when you register a new one through Wix.</li>
+      <li>Taxes may vary, and Wix can change prices. I'll show you the exact total on Wix's checkout screen before you pay anything.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="timeline">
+  <div class="wrap">
+    <div class="eyebrow">Timeline</div>
+    <h2>From hello to live</h2>
+    <ol class="steps" style="margin-top:26px">
+      <li><b>You send me your info</b>Business name, hours, services or menu, 5 to 15 photos (phone photos are fine), a logo if you have one, and the phone and email you want customers to use.</li>
+      <li><b>About 48 hours later: your first draft</b>The clock starts when I have your materials.</li>
+      <li><b>You review, I revise</b>One round of changes is included.</li>
+      <li><b>Go live and transfer</b>We publish, move the site into your Wix account, and update your Google Business Profile together.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="alt" id="support">
+  <div class="wrap">
+    <div class="eyebrow">After launch</div>
+    <h2>Optional update support</h2>
+    <div class="cols">
+      <div class="card">
+        <h3>Small updates, when you need them</h3>
+        <p>If you'd rather not touch the site yourself, I can handle small changes for <b>$29 a month</b>:</p>
+        <ul>
+          <li>Hours, phone number, or a new photo</li>
+          <li>A holiday notice</li>
+          <li>Checking that your contact form still works</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Good to know</h3>
+        <ul>
+          <li>You pay Wix directly. The $29 is for updates only.</li>
+          <li>It doesn't include a redesign, an online store, or big new sections. I'd quote those separately.</li>
+          <li>You can cancel any time and keep your site.</li>
+          <li>Or skip it. Wix makes simple edits easy to do yourself.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <h2>Common questions</h2>
+    <details><summary>Do I have to use Wix?</summary><div class="a"><p>Yes, for this offer. Wix is how I can turn a site around in about 48 hours and leave you with something you can edit yourself.</p></div></details>
+    <details><summary>Who owns the site?</summary><div class="a"><p>You do. I transfer it into your own Wix account, and I won't keep your site hostage.</p></div></details>
+    <details><summary>What do you need from me?</summary><div class="a"><p>Your hours, services or menu, 5 to 15 photos (phone photos are fine), a logo if you have one, and the phone and email you want customers to use. If you only have a Facebook page, we can start from that.</p></div></details>
+    <details><summary>Can I see a draft before I commit?</summary><div class="a"><p>Yes. You get a preview and one round of revisions. Payment terms go in writing before work starts, typically a deposit to begin and the balance when you approve.</p></div></details>
+    <details><summary>Do you write the words?</summary><div class="a"><p>I can draft short, plain page text from what you already use. You approve every word before it goes live.</p></div></details>
+    <details><summary>Will this get me to the top of Google?</summary><div class="a"><p>I can't promise that, and nobody honestly can. What you get is a clear, mobile-friendly site, basic search setup, and a cleaned-up Google Business Profile, which helps people find you.</p></div></details>
+    <details><summary>What if I'm not interested?</summary><div class="a"><p>No problem at all. I'll follow up once, and if it's not for you, I'll stop.</p></div></details>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Let's talk about your website</h2>
+    <p>Call, text, or email me. I'm Fred, I'm local, and I'm happy to answer questions with no pressure.</p>
+    <div class="btns">
+      <a class="btn" href="tel:FRED_PHONE_PLACEHOLDER">Call or text <span class="ph">[Fred's phone]</span></a>
+      <a class="btn alt" href="mailto:FRED_EMAIL_PLACEHOLDER">Email <span class="ph" style="background:#e9edf5;color:var(--navy)">[Fred's email]</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">Fred Ramon · Davie, Florida · Wix websites for local businesses</div>
+</footer>
+
+</body>
+</html>
