@@ -212,7 +212,7 @@ function sendIt(rec){
   document.body.appendChild(f);f.submit();
 }
 (function(){var q=new URLSearchParams(location.search).get('sent');if(!q)return;try{var r=JSON.parse(sessionStorage.getItem('luw_last')||'null');if(r&&r.id===q)render(r)}catch(_){}})();
-$('f').addEventListener('submit',function(e){
+$('f').addEventListener('submit',async function(e){
  e.preventDefault();
  var m=$('msg');
  try{
@@ -228,6 +228,13 @@ $('f').addEventListener('submit',function(e){
   rec.signatureImage=drawn?c.toDataURL('image/png'):null;
   try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){}
   m.textContent='Sending your agreement... one moment.';show(m);
+  rec.terms=termsText();
+  try{
+    var ac=new AbortController();
+    var t=setTimeout(function(){ac.abort()},8000);
+    await fetch('https://loveur-agreements.ramon-net.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec),signal:ac.signal});
+    clearTimeout(t);
+  }catch(_){}
   sendIt(rec);
  }catch(err){
   m.textContent='Something went wrong on this page ('+err.message+'). Please tell Fred.';show(m);
