@@ -223,7 +223,7 @@ function makePdf(rec){
   // terms
   doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Terms of this agreement',L,y);
   doc.setDrawColor(217,65,31);doc.setLineWidth(1.5);doc.line(L,y+5,L+56,y+5);y+=20;
-  var terms=[].map.call(document.querySelectorAll('.terms li'),function(li){return clean(li.textContent).replace(/\s*\(Wording for Fred to confirm\.\)/,'')});
+  var terms=[].map.call(document.querySelectorAll('.terms li'),function(li){return clean(li.textContent).replace(/\s*\(Wording for Fred to confirm\.\)/,'').replace(/love ur website/gi,'Love Your Website')});
   var BX=L+118;
   terms.forEach(function(t,i){
     var m=/^([^.]{1,40})\.\s*(.*)$/.exec(t),head=m?m[1]:'',body=m?m[2]:t;
