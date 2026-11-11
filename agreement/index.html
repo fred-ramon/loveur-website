@@ -62,7 +62,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 
 <main class="wrap">
 <div class="intro" id="intro">
-<div class="draft"><b>TEST MODE.</b> This page is for Fred's review and practice runs only, not for real clients yet. Amounts and wording are a starting point. Anything submitted is marked TEST and can be deleted. The Submit button isn't connected to a signing or payment service yet.</div>
+<div class="draft"><b>TEST MODE.</b> This page is for Fred's review and practice runs only, not for real clients yet. Amounts and wording are a starting point. Anything submitted is marked TEST. Submitting emails a copy to you and to Fred; nothing is charged.</div>
 <h1 id="h1">Website agreement</h1>
 <p id="lede">Please read the terms, choose your options, and sign at the bottom. It takes about five minutes. Nothing is charged on this page.</p>
 </div>
@@ -70,8 +70,8 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <div class="done" id="done" tabindex="-1" role="status">
 <div class="card">
 <h2>&#10003; Thank you for your business!</h2>
-<p>We'll get to work. You'll hear from me soon about next steps.</p>
-<p class="note"><b>TEST MODE:</b> nothing was sent, saved, or charged. This is what a real submission would have captured.</p>
+<p>We'll get to work. You'll hear from me soon about next steps. A copy of your agreement is on its way to <b id="d_mail"></b>.</p>
+<p class="note"><b>TEST MODE:</b> nothing was charged. Check your email for your copy (it can take a minute, and may land in spam).</p>
 <div class="ref" id="d_ref"></div>
 <dl id="d_sum"></dl>
 <div id="d_sigwrap" style="display:none;margin-top:14px"><p class="note" style="margin:0 0 6px"><b>Drawn signature</b></p><img id="d_sig" alt="Drawn signature" style="width:100%;max-width:420px;border:1px solid var(--line);border-radius:10px;background:#fff"></div>
@@ -175,6 +175,43 @@ c.addEventListener('pointermove',function(e){if(!draw)return;var p=pt(e);x.lineT
 ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){draw=false})});
 $('clr').addEventListener('click',function(){x.clearRect(0,0,c.width,c.height);drawn=false});
 function show(el){el.style.display='block';try{el.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){el.scrollIntoView(true)}}
+function render(rec){
+  $('d_ref').textContent='Reference: '+rec.id;
+  var rows=[['Business',rec.business],['Name',rec.name],['Email',rec.email],['Phone',rec.phone],['Add-ons',rec.addons.length?rec.addons.join(', '):'None'],['Update support',rec.support?'Yes, $29/mo':'No'],['Project total',rec.total],['Deposit',rec.deposit],['Balance',rec.balance],['Signed as',rec.signedAs+(rec.drawn?' (and drawn signature)':'')],['Date',rec.date]];
+  $('d_sum').innerHTML='';
+  rows.forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];$('d_sum').appendChild(dt);$('d_sum').appendChild(dd)});
+  if(rec.signatureImage){$('d_sig').src=rec.signatureImage;$('d_sigwrap').style.display='block'}else{$('d_sigwrap').style.display='none'}
+  $('d_mail').textContent=rec.email;
+  $('f').style.display='none';$('h1').style.display='none';$('lede').style.display='none';
+  var d=$('done');d.style.display='block';window.scrollTo(0,0);try{d.focus({preventScroll:true})}catch(_){}
+}
+function termsText(){return [].map.call(document.querySelectorAll('.terms li'),function(li,i){return (i+1)+'. '+li.textContent.replace(/\s+/g,' ').trim()}).join('\n')}
+function summaryText(rec){
+  return ['Reference: '+rec.id+(rec.mode==='TEST'?' (TEST submission, not a real order)':''),'Date: '+rec.date,'Business: '+rec.business,'Name: '+rec.name,'Email: '+rec.email,'Phone: '+rec.phone,
+  'Package: Standard site, $500','Add-ons ($150 each): '+(rec.addons.length?rec.addons.join(', '):'None'),'Update support: '+(rec.support?'Yes, $29/month after launch':'No'),
+  'Project total: '+rec.total,'Deposit to begin: '+rec.deposit,'Balance when you approve the site: '+rec.balance,
+  'Terms: agreed (checkbox checked)','Typed signature: '+rec.signedAs,'Drawn signature: '+(rec.drawn?'yes (image attached to Fred\'s copy)':'none')].join('\n');
+}
+function sendIt(rec){
+  var f=document.createElement('form');f.method='POST';f.action='https://formsubmit.co/fred@ramon.net';f.enctype='multipart/form-data';f.style.display='none';
+  var add=function(n,v){var i=document.createElement(n==='_autoresponse'||n==='Terms'||n==='Summary'?'textarea':'input');if(i.tagName==='INPUT')i.type='hidden';i.name=n;i.value=v;f.appendChild(i)};
+  add('_subject',rec.id+' | love ur website agreement | '+rec.business);
+  add('_template','box');
+  add('_next',location.origin+location.pathname+'?sent='+encodeURIComponent(rec.id));
+  add('_honey','');
+  add('_autoresponse','Thank you for your business! We\'ll get to work. Here is a copy of the agreement you signed with love ur website (Fred Ramon).\n\n'+summaryText(rec)+'\n\nTERMS YOU AGREED TO\n'+termsText()+'\n\nQuestions? Reply to fred@ramon.net or call or text (954) 401-7111.');
+  add('Reference',rec.id);add('Mode',rec.mode);add('name',rec.name);add('email',rec.email);add('Business',rec.business);add('Phone',rec.phone);
+  add('Add-ons',rec.addons.length?rec.addons.join(', '):'None');add('Update support',rec.support?'Yes, $29/mo':'No');
+  add('Project total',rec.total);add('Deposit',rec.deposit);add('Balance',rec.balance);add('Terms agreed','Yes');add('Typed signature',rec.signedAs);add('Drawn signature',rec.drawn?'Yes, attached':'None');add('Date',rec.date);
+  add('Terms',termsText());
+  if(rec.signatureImage){try{
+    var b64=rec.signatureImage.split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);
+    var file=new File([u],rec.id+'-signature.png',{type:'image/png'}),dt=new DataTransfer();dt.items.add(file);
+    var fi=document.createElement('input');fi.type='file';fi.name='attachment';fi.files=dt.files;f.appendChild(fi);
+  }catch(_){}}
+  document.body.appendChild(f);f.submit();
+}
+(function(){var q=new URLSearchParams(location.search).get('sent');if(!q)return;try{var r=JSON.parse(sessionStorage.getItem('luw_last')||'null');if(r&&r.id===q)render(r)}catch(_){}})();
 $('f').addEventListener('submit',function(e){
  e.preventDefault();
  var m=$('msg');
@@ -188,21 +225,16 @@ $('f').addEventListener('submit',function(e){
   }
   m.style.display='none';
   var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
-  console.log(rec);
-  $('d_ref').textContent='Reference: '+rec.id;
-  var rows=[['Business',rec.business],['Name',rec.name],['Email',rec.email],['Phone',rec.phone],['Add-ons',rec.addons.length?rec.addons.join(', '):'None'],['Update support',rec.support?'Yes, $29/mo':'No'],['Project total',rec.total],['Deposit',rec.deposit],['Balance',rec.balance],['Signed as',rec.signedAs+(rec.drawn?' (and drawn signature)':'')],['Date',rec.date]];
-  $('d_sum').innerHTML='';
-  rows.forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];$('d_sum').appendChild(dt);$('d_sum').appendChild(dd)});
   rec.signatureImage=drawn?c.toDataURL('image/png'):null;
-  if(drawn){$('d_sig').src=rec.signatureImage;$('d_sigwrap').style.display='block'}else{$('d_sigwrap').style.display='none'}
-  $('f').style.display='none';$('h1').style.display='none';$('lede').style.display='none';
-  var d=$('done');d.style.display='block';window.scrollTo(0,0);try{d.focus({preventScroll:true})}catch(_){}
+  try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){}
+  m.textContent='Sending your agreement... one moment.';show(m);
+  sendIt(rec);
  }catch(err){
   m.textContent='Something went wrong on this page ('+err.message+'). Please tell Fred.';show(m);
  }
 });
 $('again').addEventListener('click',function(){
- $('f').reset();calc();$('done').style.display='none';$('f').style.display='block';$('h1').style.display='';$('lede').style.display='';$('msg').style.display='none';
+ history.replaceState(null,'',location.pathname);$('f').reset();calc();$('done').style.display='none';$('f').style.display='block';$('h1').style.display='';$('lede').style.display='';$('msg').style.display='none';
  size();window.scrollTo(0,0);
 });
 })();
