@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Website agreement | love ur website</title>
+<meta name="theme-color" content="#14213d">
+<style>
+:root{--navy:#14213d;--ink:#1b2438;--muted:#4a5568;--bg:#fbf8f3;--card:#fff;--line:#e6dfd3;--accent:#d9411f;--accent-dark:#b5340f;--soft:#fff1ec;--ok:#1d6b43;--r:18px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:19px;line-height:1.6;padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+a{color:var(--accent-dark)}
+.wrap{max-width:760px;margin:0 auto;padding:0 22px}
+h1,h2,h3{line-height:1.2;margin:0 0 .5em;color:var(--navy)}
+h1{font-size:clamp(1.9rem,6vw,2.7rem)}
+h2{font-size:clamp(1.4rem,4.4vw,1.8rem)}
+p{margin:0 0 1em}
+.top{background:var(--navy);color:#fff;padding-top:env(safe-area-inset-top)}
+.top .wrap{min-height:64px;display:flex;align-items:center;gap:10px;font-weight:700}
+.top svg{width:28px;height:28px;flex:none}
+.top a{color:#fff;text-decoration:none;white-space:nowrap}
+.intro{padding:34px 0 8px}
+.draft{background:#fff8d6;border:2px dashed #c9a400;border-radius:12px;padding:12px 16px;font-size:.95rem;margin-bottom:22px}
+section{padding:22px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.note{font-size:.95rem;color:var(--muted)}
+label{display:block;font-weight:700;margin:16px 0 6px;color:var(--navy)}
+input[type=text],input[type=email],input[type=tel]{width:100%;min-height:54px;padding:0 14px;font-size:1.05rem;border:2px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font-family:inherit}
+input:focus,button:focus-visible{outline:3px solid #9bb4ff;outline-offset:2px}
+.opt{display:flex;gap:14px;align-items:flex-start;padding:14px;border:2px solid var(--line);border-radius:14px;margin:10px 0;background:#fff;font-weight:400;color:var(--ink);cursor:pointer}
+.opt input{width:26px;height:26px;margin:3px 0 0;flex:none;accent-color:var(--accent)}
+.opt b{color:var(--navy)}
+.opt small{display:block;color:var(--muted)}
+.total{background:var(--navy);color:#fff;border-radius:var(--r);padding:20px 22px;margin-top:18px}
+.total .row{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+.total .big{font-size:1.5rem;font-weight:800;border-top:1px solid rgba(255,255,255,.3);margin-top:8px;padding-top:10px}
+.terms{max-height:none}
+.terms ol{padding-left:1.3em;margin:0}
+.terms li{margin-bottom:.7em}
+.sig{border:2px solid var(--line);border-radius:14px;background:#fff;touch-action:none;width:100%;height:170px;display:block}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 28px;border-radius:14px;font-size:1.1rem;font-weight:700;background:var(--accent);color:#fff;border:2px solid var(--accent);cursor:pointer;font-family:inherit;width:100%;margin-top:22px}
+.btn.alt{background:#fff;color:var(--navy);border-color:var(--navy);width:auto;min-height:44px;margin-top:8px;font-size:1rem;padding:0 18px}
+.msg{margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--soft);border-left:6px solid var(--accent);display:none}
+footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+<svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#d9411f"/><path d="M50 76S22 58 22 40a14 14 0 0 1 28-4 14 14 0 0 1 28 4c0 18-28 36-28 36z" fill="#fff"/></svg>
+<a href="../">love ur website</a></div></header>
+
+<main class="wrap">
+<div class="intro">
+<div class="draft"><b>TEST MODE.</b> This page is for Fred's review and practice runs only, not for real clients yet. Amounts and wording are a starting point. Anything submitted is marked TEST and can be deleted. The Submit button isn't connected to a signing or payment service yet.</div>
+<h1>Website agreement</h1>
+<p>Please read the terms, choose your options, and sign at the bottom. It takes about five minutes. Nothing is charged on this page.</p>
+</div>
+
+<form id="f" novalidate>
+<section>
+<h2>1. About you</h2>
+<div class="card">
+<label for="biz">Business name</label><input type="text" id="biz" autocomplete="organization" required>
+<label for="name">Your full name</label><input type="text" id="name" autocomplete="name" required>
+<label for="email">Email</label><input type="email" id="email" autocomplete="email" required>
+<label for="phone">Phone</label><input type="tel" id="phone" autocomplete="tel" required>
+</div>
+</section>
+
+<section>
+<h2>2. Choose your options</h2>
+<div class="card">
+<label class="opt" style="margin-top:0"><input type="checkbox" checked disabled><span><b>Standard site, $500</b><small>3 to 5 pages, contact form, basic search setup, Google Business Profile setup or cleanup, one round of revisions, and a preview link.</small></span></label>
+<p class="note" style="margin:14px 0 0"><b>Optional add-ons, $150 each:</b></p>
+<label class="opt"><input type="checkbox" class="addon" value="Custom domain setup"><span><b>Custom domain setup</b><small>Domain itself is billed at cost.</small></span></label>
+<label class="opt"><input type="checkbox" class="addon" value="Photo cleanup and gallery"><span><b>Photo cleanup and a simple gallery</b><small>You supply the photos.</small></span></label>
+<label class="opt"><input type="checkbox" class="addon" value="Online booking"><span><b>Online booking button or basic Wix Bookings</b></span></label>
+<label class="opt"><input type="checkbox" class="addon" value="Online menu"><span><b>Online menu with prices, or a PDF menu you can swap</b></span></label>
+<label class="opt"><input type="checkbox" class="addon" value="Extra pages"><span><b>Extra pages</b><small>For example catering or a second location.</small></span></label>
+<p class="note" style="margin:14px 0 0"><b>After launch, optional:</b></p>
+<label class="opt"><input type="checkbox" id="support"><span><b>Update support, $29 a month</b><small>Small changes like hours, phone, photos, and checking your contact form. Cancel any time.</small></span></label>
+<div class="total" aria-live="polite">
+<div class="row"><span>Standard site</span><span>$500</span></div>
+<div class="row"><span id="addn">Add-ons (0)</span><span id="addt">$0</span></div>
+<div class="row big"><span>Project total</span><span id="tot">$500</span></div>
+<div class="row" style="margin-top:8px;font-size:.95rem"><span id="depl">Deposit to begin</span><span id="dep">$250</span></div>
+<div class="row" style="font-size:.95rem"><span>Balance when you approve the site</span><span id="bal">$250</span></div>
+<div class="row" id="supr" style="font-size:.95rem;display:none"><span>Update support, billed monthly after launch</span><span>$29/mo</span></div>
+</div>
+<p class="note" style="margin-top:12px">Your Wix plan and domain are paid to Wix directly and aren't part of these amounts.</p>
+</div>
+</section>
+
+<section>
+<h2>3. Terms</h2>
+<div class="card terms">
+<ol>
+<li><b>Work.</b> Fred Ramon (love ur website) will design and build the website described above, using Wix.</li>
+<li><b>Payment.</b> Payment terms are in writing before work starts. A deposit of <b id="t_dep">50%</b> is due to begin, and the balance is due when you approve the site. Work starts when the deposit is received and I have your materials.</li>
+<li><b>Timeline.</b> A first draft is ready in about 48 hours after I have your business information and photos.</li>
+<li><b>Revisions.</b> One round of revisions after the first draft is included. Additional changes can be quoted separately.</li>
+<li><b>Ownership.</b> After final payment I transfer the site to your own Wix account. You own your site, content, and domain.</li>
+<li><b>Wix and domain costs.</b> Your Wix plan and domain are paid to Wix or the registrar directly, and prices are set by them.</li>
+<li><b>What isn't included.</b> A custom-coded app, a full online store, or any promise of a particular Google ranking.</li>
+<li><b>Your materials.</b> You confirm you have the right to use the text, photos, and logo you provide.</li>
+<li><b>Cancelling.</b> If you cancel before work starts, the deposit is refunded. After work starts, the deposit covers the work already done. <i>(Wording for Fred to confirm.)</i></li>
+</ol>
+</div>
+</section>
+
+<section>
+<h2>4. Sign</h2>
+<div class="card">
+<label class="opt" style="margin-top:0"><input type="checkbox" id="agree" required><span>I have read and agree to these terms and the payment schedule above.</span></label>
+<label for="typed">Type your full name as your signature</label>
+<input type="text" id="typed" autocomplete="off" required>
+<label>Or sign with your finger or mouse (optional)</label>
+<canvas id="sig" class="sig" aria-label="Signature box"></canvas>
+<button type="button" class="btn alt" id="clr">Clear signature</button>
+<p class="note" style="margin-top:14px">Date: <b id="today"></b></p>
+<button type="submit" class="btn">Sign and submit</button>
+<div class="msg" id="msg" role="status"></div>
+</div>
+</section>
+</form>
+
+<footer>Questions? <a href="../#contact">Contact Fred</a>. This page isn't listed in search engines.</footer>
+</main>
+
+<script>
+(function(){
+var DEP_PCT=50; // deposit percent: Fred to confirm
+var $=function(i){return document.getElementById(i)};
+var money=function(n){return '$'+n.toLocaleString('en-US')};
+$('today').textContent=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+$('t_dep').textContent=DEP_PCT+'%';
+$('depl').textContent='Deposit to begin ('+DEP_PCT+'%)';
+function calc(){
+ var n=document.querySelectorAll('.addon:checked').length,add=n*150,tot=500+add,dep=Math.round(tot*DEP_PCT/100);
+ $('addn').textContent='Add-ons ('+n+')';$('addt').textContent=money(add);
+ $('tot').textContent=money(tot);$('dep').textContent=money(dep);$('bal').textContent=money(tot-dep);
+ $('supr').style.display=$('support').checked?'flex':'none';
+}
+document.querySelectorAll('.addon,#support').forEach(function(e){e.addEventListener('change',calc)});calc();
+// signature pad
+var c=$('sig'),x=c.getContext('2d'),draw=false,drawn=false;
+function size(){var r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;x.scale(d,d);x.lineWidth=2.5;x.lineCap='round';x.strokeStyle='#14213d';drawn=false}
+size();
+function pt(e){var r=c.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top}}
+c.addEventListener('pointerdown',function(e){draw=true;drawn=true;c.setPointerCapture(e.pointerId);var p=pt(e);x.beginPath();x.moveTo(p.x,p.y)});
+c.addEventListener('pointermove',function(e){if(!draw)return;var p=pt(e);x.lineTo(p.x,p.y);x.stroke()});
+['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){draw=false})});
+$('clr').addEventListener('click',function(){x.clearRect(0,0,c.width,c.height);drawn=false});
+$('f').addEventListener('submit',function(e){
+ e.preventDefault();var m=$('msg');m.style.display='block';
+ var need=['biz','name','email','phone','typed'].filter(function(i){return !$(i).value.trim()});
+ if(need.length||!$('agree').checked){m.textContent='Please fill in every field, check the agreement box, and type your name to sign.';return}
+ var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent};
+ console.log(rec);
+ m.textContent='TEST MODE: this page is not yet connected to a signing and payment service, so nothing was sent or saved. Reference '+rec.id+'.';
+});
+})();
+</script>
+</body>
+</html>
