@@ -241,7 +241,7 @@ function makePdf(rec){
   // signature block
   y+=6;doc.setDrawColor(226,221,210);doc.setLineWidth(1);doc.line(L,y,R,y);y+=18;
   doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Customer signature',L,y);
-  doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('The customer checked "I agree" and typed their full name.',L,y+12);y+=22;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('The customer typed their full name as their signature.',L,y+12);y+=22;
   var top=y,sh=0;
   if(rec.signatureImage){var props=doc.getImageProperties(rec.signatureImage),w=220,h=props.height*w/props.width;if(h>58){h=58;w=props.width*h/props.height}doc.addImage(rec.signatureImage,'PNG',L,y,w,h);sh=h}
   else{doc.setFont('times','italic');doc.setFontSize(20);ink();doc.text(clean(rec.signedAs),L,y+34);sh=40}
@@ -250,7 +250,7 @@ function makePdf(rec){
   var cx=L+290;doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAs),cx,top+18);doc.line(cx,top+24,R,top+24);doc.setFontSize(8.5);muted();doc.text('Typed full name',cx,top+35);
   doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAt||rec.date||''),cx,ly-6);doc.line(cx,ly,R,ly);doc.setFontSize(8.5);muted();doc.text('Date signed',cx,ly+11);
   y=ly+11;
-  y+=22;doc.setFont('helvetica','italic');doc.setFontSize(9);muted();doc.text('Signed electronically on loveur.website/agreement',L,y);
+  y+=22;doc.setFont('helvetica','italic');doc.setFontSize(9);muted();doc.text('Signed electronically on loveur.website/agreement. The customer clicked "I agree."',L,y);
   if(doc.getNumberOfPages()>1||y>792-44){/* safety: should never happen */}
   var n=doc.getNumberOfPages();for(var p=1;p<=n;p++){doc.setPage(p);footer()}
   return doc.output('datauristring');
