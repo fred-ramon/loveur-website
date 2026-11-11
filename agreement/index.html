@@ -43,6 +43,15 @@ input:focus,button:focus-visible{outline:3px solid #9bb4ff;outline-offset:2px}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 28px;border-radius:14px;font-size:1.1rem;font-weight:700;background:var(--accent);color:#fff;border:2px solid var(--accent);cursor:pointer;font-family:inherit;width:100%;margin-top:22px}
 .btn.alt{background:#fff;color:var(--navy);border-color:var(--navy);width:auto;min-height:44px;margin-top:8px;font-size:1rem;padding:0 18px}
 .msg{margin-top:16px;padding:14px 16px;border-radius:12px;background:var(--soft);border-left:6px solid var(--accent);display:none}
+input.bad{border-color:var(--accent);background:#fff6f3}
+.msg{scroll-margin-top:90px}
+.done{display:none;scroll-margin-top:80px;padding:22px 0}
+.done .card{border:3px solid var(--ok)}
+.done h2{color:var(--ok)}
+.done dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:1rem}
+.done dt{font-weight:700;color:var(--navy)}
+.done dd{margin:0;word-break:break-word}
+.ref{font-size:1.3rem;font-weight:800;letter-spacing:.02em;background:#eef7f1;border-radius:10px;padding:10px 14px;margin:14px 0;word-break:break-all}
 footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 </style>
 </head>
@@ -52,10 +61,21 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <a href="../">love ur website</a></div></header>
 
 <main class="wrap">
-<div class="intro">
+<div class="intro" id="intro">
 <div class="draft"><b>TEST MODE.</b> This page is for Fred's review and practice runs only, not for real clients yet. Amounts and wording are a starting point. Anything submitted is marked TEST and can be deleted. The Submit button isn't connected to a signing or payment service yet.</div>
-<h1>Website agreement</h1>
-<p>Please read the terms, choose your options, and sign at the bottom. It takes about five minutes. Nothing is charged on this page.</p>
+<h1 id="h1">Website agreement</h1>
+<p id="lede">Please read the terms, choose your options, and sign at the bottom. It takes about five minutes. Nothing is charged on this page.</p>
+</div>
+
+<div class="done" id="done" tabindex="-1" role="status">
+<div class="card">
+<h2>&#10003; Thank you for your business!</h2>
+<p>We'll get to work. You'll hear from me soon about next steps.</p>
+<p class="note"><b>TEST MODE:</b> nothing was sent, saved, or charged. This is what a real submission would have captured.</p>
+<div class="ref" id="d_ref"></div>
+<dl id="d_sum"></dl>
+<button type="button" class="btn" id="again">Start over</button>
+</div>
 </div>
 
 <form id="f" novalidate>
@@ -153,13 +173,34 @@ c.addEventListener('pointerdown',function(e){draw=true;drawn=true;c.setPointerCa
 c.addEventListener('pointermove',function(e){if(!draw)return;var p=pt(e);x.lineTo(p.x,p.y);x.stroke()});
 ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){draw=false})});
 $('clr').addEventListener('click',function(){x.clearRect(0,0,c.width,c.height);drawn=false});
+function show(el){el.style.display='block';try{el.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){el.scrollIntoView(true)}}
 $('f').addEventListener('submit',function(e){
- e.preventDefault();var m=$('msg');m.style.display='block';
- var need=['biz','name','email','phone','typed'].filter(function(i){return !$(i).value.trim()});
- if(need.length||!$('agree').checked){m.textContent='Please fill in every field, check the agreement box, and type your name to sign.';return}
- var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent};
- console.log(rec);
- m.textContent='TEST MODE: this page is not yet connected to a signing and payment service, so nothing was sent or saved. Reference '+rec.id+'.';
+ e.preventDefault();
+ var m=$('msg');
+ try{
+  ['biz','name','email','phone','typed'].forEach(function(i){$(i).classList.remove('bad')});
+  var need=['biz','name','email','phone','typed'].filter(function(i){return !$(i).value.trim()});
+  need.forEach(function(i){$(i).classList.add('bad')});
+  if(need.length||!$('agree').checked){
+   m.textContent='Almost there: '+(need.length?'please fill in the highlighted fields':'please check the agreement box')+(need.length&&!$('agree').checked?' and check the agreement box':'')+'.';
+   show(m);if(need.length)$(need[0]).focus();return;
+  }
+  m.style.display='none';
+  var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
+  console.log(rec);
+  $('d_ref').textContent='Reference: '+rec.id;
+  var rows=[['Business',rec.business],['Name',rec.name],['Email',rec.email],['Phone',rec.phone],['Add-ons',rec.addons.length?rec.addons.join(', '):'None'],['Update support',rec.support?'Yes, $29/mo':'No'],['Project total',rec.total],['Deposit',rec.deposit],['Balance',rec.balance],['Signed as',rec.signedAs+(rec.drawn?' (and drawn signature)':'')],['Date',rec.date]];
+  $('d_sum').innerHTML='';
+  rows.forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];$('d_sum').appendChild(dt);$('d_sum').appendChild(dd)});
+  $('f').style.display='none';$('h1').style.display='none';$('lede').style.display='none';
+  var d=$('done');d.style.display='block';window.scrollTo(0,0);try{d.focus({preventScroll:true})}catch(_){}
+ }catch(err){
+  m.textContent='Something went wrong on this page ('+err.message+'). Please tell Fred.';show(m);
+ }
+});
+$('again').addEventListener('click',function(){
+ $('f').reset();calc();$('done').style.display='none';$('f').style.display='block';$('h1').style.display='';$('lede').style.display='';$('msg').style.display='none';
+ size();window.scrollTo(0,0);
 });
 })();
 </script>
