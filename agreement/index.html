@@ -150,6 +150,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <footer>Questions? <a href="../#contact">Contact Fred</a>. This page isn't listed in search engines.</footer>
 </main>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js" integrity="sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function(){
 var DEP_PCT=50; // deposit percent: Fred to confirm
@@ -192,6 +193,81 @@ function summaryText(rec){
   'Project total: '+rec.total,'Deposit to begin: '+rec.deposit,'Balance when you approve the site: '+rec.balance,
   'Terms: agreed (checkbox checked)','Typed signature: '+rec.signedAs,'Drawn signature: '+(rec.drawn?'yes (image attached to Fred\'s copy)':'none')].join('\n');
 }
+function makePdf(rec){
+  var J=(window.jspdf&&window.jspdf.jsPDF)||window.jsPDF;
+  if(!J) throw new Error('PDF library missing');
+  var doc=new J({unit:'pt',format:'letter'});
+  var left=56, right=612-56, y=64, valueX=left+160;
+  doc.setTextColor(20,33,61);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(18);
+  doc.text('love ur website \u2014 Website Agreement', left, y);
+  y+=16;
+  doc.setDrawColor(217,65,31);
+  doc.setLineWidth(2.5);
+  doc.line(left,y,left+220,y);
+  y+=28;
+  if(rec.mode==='TEST'){
+    doc.setFillColor(255,248,214);
+    doc.setDrawColor(201,164,0);
+    doc.setLineWidth(1);
+    doc.roundedRect(left,y-12,96,20,3,3,'FD');
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(10);
+    doc.setTextColor(140,90,0);
+    doc.text('TEST MODE', left+12, y+2);
+    doc.setTextColor(20,33,61);
+    y+=30;
+  }
+  var rows=[
+    ['Reference', rec.id],
+    ['Date', rec.signedAt||rec.date||''],
+    ['Business', rec.business],
+    ['Signer', rec.name],
+    ['Package', 'Standard site, $500'],
+    ['Add-ons', rec.addons&&rec.addons.length?rec.addons.join(', '):'None'],
+    ['Update support', rec.support?'Yes, $29/mo':'No'],
+    ['Project total', rec.total],
+    ['Deposit', rec.deposit],
+    ['Balance', rec.balance],
+    ['Terms agreed', 'Yes'],
+    ['Typed signature', rec.signedAs]
+  ];
+  rows.forEach(function(r){
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(10);
+    doc.setTextColor(74,85,104);
+    doc.text(r[0], left, y);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(12);
+    doc.setTextColor(27,36,56);
+    var lines=doc.splitTextToSize(String(r[1]||'\u2014'), right-valueX);
+    doc.text(lines, valueX, y);
+    y+=Math.max(22, lines.length*14+8);
+  });
+  if(rec.signatureImage){
+    y+=8;
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(10);
+    doc.setTextColor(74,85,104);
+    doc.text('Drawn signature', left, y);
+    y+=8;
+    var maxW=300, maxH=86;
+    var props=doc.getImageProperties(rec.signatureImage);
+    var w=maxW, h=props.height*w/props.width;
+    if(h>maxH){h=maxH;w=props.width*h/props.height;}
+    doc.setDrawColor(230,223,211);
+    doc.setLineWidth(1);
+    doc.rect(valueX, y, w+8, h+8);
+    doc.addImage(rec.signatureImage,'PNG',valueX+4,y+4,w,h);
+  }
+  return doc.output('datauristring');
+}
+function attachFile(f,dataUrl,name,type,field){
+  var b64=dataUrl.split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);
+  var file=new File([u],name,{type:type}),dt=new DataTransfer();dt.items.add(file);
+  var fi=document.createElement('input');fi.type='file';fi.name=field;fi.files=dt.files;f.appendChild(fi);
+}
 function sendIt(rec){
   var f=document.createElement('form');f.method='POST';f.action='https://formsubmit.co/fred@ramon.net';f.enctype='multipart/form-data';f.style.display='none';
   var add=function(n,v){var i=document.createElement(n==='_autoresponse'||n==='Terms'||n==='Summary'?'textarea':'input');if(i.tagName==='INPUT')i.type='hidden';i.name=n;i.value=v;f.appendChild(i)};
@@ -204,11 +280,8 @@ function sendIt(rec){
   add('Add-ons',rec.addons.length?rec.addons.join(', '):'None');add('Update support',rec.support?'Yes, $29/mo':'No');
   add('Project total',rec.total);add('Deposit',rec.deposit);add('Balance',rec.balance);add('Terms agreed','Yes');add('Typed signature',rec.signedAs);add('Drawn signature',rec.drawn?'Yes, attached':'None');add('Date',rec.date);
   add('Terms',termsText());
-  if(rec.signatureImage){try{
-    var b64=rec.signatureImage.split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);for(var k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);
-    var file=new File([u],rec.id+'-signature.png',{type:'image/png'}),dt=new DataTransfer();dt.items.add(file);
-    var fi=document.createElement('input');fi.type='file';fi.name='attachment';fi.files=dt.files;f.appendChild(fi);
-  }catch(_){}}
+  if(rec.agreementPdf){try{attachFile(f,rec.agreementPdf,rec.id+'-agreement.pdf','application/pdf','attachment')}catch(_){}}
+  if(rec.signatureImage){try{attachFile(f,rec.signatureImage,rec.id+'-signature.png','image/png','attachment2')}catch(_){}}
   document.body.appendChild(f);f.submit();
 }
 (function(){var q=new URLSearchParams(location.search).get('sent');if(!q)return;try{var r=JSON.parse(sessionStorage.getItem('luw_last')||'null');if(r&&r.id===q)render(r)}catch(_){}})();
@@ -226,7 +299,9 @@ $('f').addEventListener('submit',async function(e){
   m.style.display='none';
   var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
   rec.signatureImage=drawn?c.toDataURL('image/png'):null;
-  try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){}
+  rec.signedAt=new Date().toLocaleString('en-US',{timeZone:'America/New_York',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
+  try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
+  try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(_){}
   m.textContent='Sending your agreement... one moment.';show(m);
   rec.terms=termsText();
   try{
