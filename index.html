@@ -33,12 +33,15 @@ li{margin-bottom:.5em}
 .top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:20;padding-top:env(safe-area-inset-top)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
 .brand{color:#fff;text-decoration:none;font-weight:700;font-size:1.05rem;display:flex;align-items:center;gap:10px}
-.brand svg{width:28px;height:28px;flex:none}
+.brand .lu{flex:none;font-size:.8rem;font-weight:700;color:#ff6b4a;background:rgba(255,255,255,.14);border-radius:10px;padding:6px 10px;white-space:nowrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 28px;border-radius:14px;
   font-size:1.1rem;font-weight:700;text-decoration:none;background:var(--accent);color:#fff;border:2px solid var(--accent);text-align:center}
 .btn:active{background:var(--accent-dark)}
 .btn.alt{background:#fff;color:var(--navy);border-color:var(--navy)}
-.top .btn{min-height:48px;padding:0 20px;font-size:1rem}
+.top .btn{min-height:48px;padding:0 20px;font-size:1rem;white-space:nowrap}
+.top .brand{flex-direction:column;align-items:flex-start;gap:2px;line-height:1.2}
+.top .brand .lu{background:none;padding:0;border-radius:0;font-size:.85rem}
+.top .brand>span:last-child{white-space:nowrap}
 
 /* hero */
 .hero{background:linear-gradient(180deg,var(--navy) 0,#1f3160 100%);color:#fff;padding:44px 0 56px}
@@ -135,7 +138,7 @@ footer{padding:26px 0 34px;font-size:.95rem;color:var(--muted);text-align:center
 <header class="top">
   <div class="wrap">
     <a class="brand" href="#top" aria-label="Fred Ramon, home">
-      <svg viewBox="0 0 100 100" aria-hidden="true"><rect width="100" height="100" rx="22" fill="#fff" opacity=".14"/><path d="M50 76S22 58 22 40a14 14 0 0 1 28-4 14 14 0 0 1 28 4c0 18-28 36-28 36z" fill="#ff6b4a"/></svg>
+      <span class="lu">love ur website</span>
       <span>Fred Ramon<span class="loc"> · Southwest Ranches, FL</span></span>
     </a>
     <a class="btn" href="#contact">Contact me</a>
