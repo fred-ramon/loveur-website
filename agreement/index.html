@@ -203,48 +203,47 @@ function makePdf(rec){
   function footer(){doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('Love Your Website  |  loveur.website  |  fred@ramon.net',L,792-30);doc.text('Reference '+rec.id,R,792-30,{align:'right'})}
   function need(h){if(y+h>BOT){doc.addPage();y=60}}
   // header band
-  doc.setFillColor(20,33,61);doc.rect(0,0,612,96,'F');
-  doc.setFillColor(217,65,31);doc.rect(0,96,612,4,'F');
-  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(22);
-  doc.text('Love Your Website - Website Agreement',L,52);
-  doc.setFont('helvetica','normal');doc.setFontSize(10.5);doc.setTextColor(214,222,235);
-  doc.text('Website design and build by Fred Ramon',L,74);
-  y=132;
-  if(rec.mode==='TEST'){doc.setFillColor(255,248,214);doc.setDrawColor(201,164,0);doc.setLineWidth(1);doc.roundedRect(R-150,y-26,150,20,3,3,'FD');doc.setFont('helvetica','bold');doc.setFontSize(9);doc.setTextColor(140,90,0);doc.text('TEST MODE - NOT A REAL ORDER',R-75,y-12.5,{align:'center'})}
-  // details box
-  var rows=[['Reference number',rec.id],['Date',rec.signedAt||rec.date||''],['Business name',rec.business],['Signed by',rec.name]];
-  doc.setDrawColor(226,221,210);doc.setFillColor(250,248,244);doc.setLineWidth(1);doc.roundedRect(L,y,W,rows.length*22+16,4,4,'FD');
-  var yy=y+24;rows.forEach(function(r){doc.setFont('helvetica','bold');doc.setFontSize(9.5);muted();doc.text(r[0].toUpperCase(),L+16,yy);doc.setFont('helvetica','normal');doc.setFontSize(11.5);ink();doc.text(clean(r[1])||'-',L+160,yy);yy+=22});
-  y+=rows.length*22+16+30;
+  doc.setFillColor(20,33,61);doc.rect(0,0,612,76,'F');
+  doc.setFillColor(217,65,31);doc.rect(0,76,612,3,'F');
+  doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(20);
+  doc.text('Love Your Website - Website Agreement',L,40);
+  doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(214,222,235);
+  doc.text('Website design and build by Fred Ramon',L,58);
+  if(rec.mode==='TEST'){doc.setFillColor(255,248,214);doc.setDrawColor(201,164,0);doc.setLineWidth(1);doc.roundedRect(R-150,48,150,18,3,3,'FD');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(140,90,0);doc.text('TEST MODE - NOT A REAL ORDER',R-75,60,{align:'center'})}
+  y=98;
+  // details box, 2x2
+  var cells=[['Reference number',rec.id],['Date',rec.signedAt||rec.date||''],['Business name',rec.business],['Signed by',rec.name]];
+  doc.setDrawColor(226,221,210);doc.setFillColor(250,248,244);doc.setLineWidth(1);doc.roundedRect(L,y,W,66,4,4,'FD');
+  cells.forEach(function(c,i){var cx=L+14+(i%2)*(W/2),cy=y+20+Math.floor(i/2)*30;doc.setFont('helvetica','bold');doc.setFontSize(7.5);muted();doc.text(c[0].toUpperCase(),cx,cy);doc.setFont('helvetica','normal');doc.setFontSize(10.5);ink();doc.text(doc.splitTextToSize(clean(c[1])||'-',W/2-24)[0],cx,cy+13)});
+  y+=66+22;
   // statement
-  doc.setFont('helvetica','normal');doc.setFontSize(11.5);ink();
+  doc.setFont('helvetica','normal');doc.setFontSize(10);ink();
   var st=doc.splitTextToSize(clean('The customer named above agrees to the terms of this agreement with Love Your Website (Fred Ramon), as listed below, for the following order: Standard site ($500)'+(rec.addons&&rec.addons.length?' with add-ons: '+rec.addons.join(', '):'')+(rec.support?', plus update support at $29/month':'')+'. Project total '+rec.total+', with a '+rec.deposit+' deposit to begin and the '+rec.balance+' balance due when the customer approves the site.'),W);
-  doc.text(st,L,y);y+=st.length*15+22;
+  doc.text(st,L,y);y+=st.length*12.5+16;
   // terms
-  doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(20,33,61);doc.text('Terms of this agreement',L,y);
-  doc.setDrawColor(217,65,31);doc.setLineWidth(1.5);doc.line(L,y+6,L+60,y+6);y+=24;
+  doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Terms of this agreement',L,y);
+  doc.setDrawColor(217,65,31);doc.setLineWidth(1.5);doc.line(L,y+5,L+56,y+5);y+=20;
   var terms=[].map.call(document.querySelectorAll('.terms li'),function(li){return clean(li.textContent).replace(/\s*\(Wording for Fred to confirm\.\)/,'')});
+  var BX=L+118;
   terms.forEach(function(t,i){
     var m=/^([^.]{1,40})\.\s*(.*)$/.exec(t),head=m?m[1]:'',body=m?m[2]:t;
-    var lines=doc.splitTextToSize(body,W-22);need(lines.length*13.5+18);
-    doc.setFont('helvetica','bold');doc.setFontSize(10.5);ink();doc.text((i+1)+'.',L,y);
-    if(head){doc.text(head,L+22,y);y+=14}
-    doc.setFont('helvetica','normal');doc.setFontSize(10.5);doc.setTextColor(55,65,85);doc.text(lines,L+22,y);y+=lines.length*13.5+9;
+    doc.setFont('helvetica','normal');doc.setFontSize(9);var lines=doc.splitTextToSize(body,R-BX);
+    doc.setFont('helvetica','bold');doc.setFontSize(9);ink();doc.text((i+1)+'. '+head,L,y);
+    doc.setFont('helvetica','normal');doc.setTextColor(55,65,85);doc.text(lines,BX,y);y+=lines.length*11+6;
   });
   // signature block
-  need(170);y+=14;
-  doc.setDrawColor(226,221,210);doc.setLineWidth(1);doc.line(L,y,R,y);y+=24;
-  doc.setFont('helvetica','bold');doc.setFontSize(13);doc.setTextColor(20,33,61);doc.text('Customer signature',L,y);y+=14;
-  doc.setFont('helvetica','normal');doc.setFontSize(10);muted();
-  doc.text(doc.splitTextToSize('Signed electronically on loveur.website. The customer checked "I agree" and typed their full name.',W),L,y);y+=26;
-  var sy=y;
-  if(rec.signatureImage){var props=doc.getImageProperties(rec.signatureImage),w=240,h=props.height*w/props.width;if(h>80){h=80;w=props.width*h/props.height}doc.addImage(rec.signatureImage,'PNG',L,y,w,h);y+=h+4}
-  else{doc.setFont('times','italic');doc.setFontSize(22);ink();doc.text(clean(rec.signedAs),L,y+30);y+=40}
-  doc.setDrawColor(27,36,56);doc.setLineWidth(0.8);doc.line(L,y,L+260,y);y+=14;
-  doc.setFont('helvetica','normal');doc.setFontSize(9.5);muted();doc.text('Signature',L,y);
-  doc.setFont('helvetica','normal');doc.setFontSize(11.5);ink();doc.text(clean(rec.signedAs),L+300,sy+(rec.signatureImage?30:30));
-  doc.setDrawColor(27,36,56);doc.line(L+300,y-14,R,y-14);doc.setFontSize(9.5);muted();doc.text('Typed full name',L+300,y);
-  y+=26;doc.setFontSize(11.5);ink();doc.text(clean(rec.signedAt||rec.date||''),L+300,y);doc.line(L+300,y+6,R,y+6);doc.setFontSize(9.5);muted();doc.text('Date signed',L+300,y+20);
+  y+=6;doc.setDrawColor(226,221,210);doc.setLineWidth(1);doc.line(L,y,R,y);y+=18;
+  doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Customer signature',L,y);
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('Signed electronically on loveur.website. The customer checked "I agree" and typed their full name.',L,y+12);y+=22;
+  var top=y,sh=0;
+  if(rec.signatureImage){var props=doc.getImageProperties(rec.signatureImage),w=220,h=props.height*w/props.width;if(h>58){h=58;w=props.width*h/props.height}doc.addImage(rec.signatureImage,'PNG',L,y,w,h);sh=h}
+  else{doc.setFont('times','italic');doc.setFontSize(20);ink();doc.text(clean(rec.signedAs),L,y+34);sh=40}
+  var ly=top+Math.max(sh,40)+4;
+  doc.setDrawColor(27,36,56);doc.setLineWidth(0.8);doc.line(L,ly,L+250,ly);doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('Signature',L,ly+11);
+  var cx=L+290;doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAs),cx,top+18);doc.line(cx,top+24,R,top+24);doc.setFontSize(8.5);muted();doc.text('Typed full name',cx,top+35);
+  doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAt||rec.date||''),cx,ly-6);doc.line(cx,ly,R,ly);doc.setFontSize(8.5);muted();doc.text('Date signed',cx,ly+11);
+  y=ly+11;
+  if(doc.getNumberOfPages()>1||y>792-44){/* safety: should never happen */}
   var n=doc.getNumberOfPages();for(var p=1;p<=n;p++){doc.setPage(p);footer()}
   return doc.output('datauristring');
 }
