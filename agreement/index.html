@@ -200,13 +200,13 @@ function makePdf(rec){
   var L=60,R=612-60,W=R-L,BOT=792-60,y=0;
   var clean=function(t){return String(t==null?'':t).replace(/[\u2018\u2019]/g,"'").replace(/[\u201C\u201D]/g,'"').replace(/[\u2013\u2014]/g,'-').replace(/\u2026/g,'...').replace(/\s+/g,' ').trim()};
   var ink=function(){doc.setTextColor(27,36,56)},muted=function(){doc.setTextColor(90,100,118)};
-  function footer(){doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('Love UR Website  |  loveur.website  |  fred@ramon.net',L,792-30);doc.text('Reference '+rec.id,R,792-30,{align:'right'})}
+  function footer(){doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('love ur website  |  loveur.website  |  fred@ramon.net',L,792-30);doc.text('Reference '+rec.id,R,792-30,{align:'right'})}
   function need(h){if(y+h>BOT){doc.addPage();y=60}}
   // header band
   doc.setFillColor(20,33,61);doc.rect(0,0,612,76,'F');
   doc.setFillColor(217,65,31);doc.rect(0,76,612,3,'F');
   doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(20);
-  doc.setFillColor(217,65,31);doc.circle(L+6.5,29,6.5,'F');doc.circle(L+19.5,29,6.5,'F');doc.triangle(L+0.4,31.5,L+25.6,31.5,L+13,45,'F');doc.setTextColor(255,255,255);doc.text('Love UR Website - Website Agreement',L+36,40);
+  doc.setFillColor(217,65,31);doc.circle(L+6.5,29,6.5,'F');doc.circle(L+19.5,29,6.5,'F');doc.triangle(L+0.4,31.5,L+25.6,31.5,L+13,45,'F');doc.setTextColor(255,255,255);doc.text('love ur website - Website Agreement',L+36,40);
   doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(214,222,235);
   doc.text('Website design and build by Fred Ramon',L+36,58);
   if(rec.mode==='TEST'){doc.setFillColor(255,248,214);doc.setDrawColor(201,164,0);doc.setLineWidth(1);doc.roundedRect(R-150,48,150,18,3,3,'FD');doc.setFont('helvetica','bold');doc.setFontSize(8.5);doc.setTextColor(140,90,0);doc.text('TEST MODE - NOT A REAL ORDER',R-75,60,{align:'center'})}
@@ -218,12 +218,12 @@ function makePdf(rec){
   y+=66+22;
   // statement
   doc.setFont('helvetica','normal');doc.setFontSize(10);ink();
-  var st=doc.splitTextToSize(clean('The customer named above agrees to the terms of this agreement with Love UR Website (Fred Ramon), as listed below, for the following order: Standard site ($500)'+(rec.addons&&rec.addons.length?' with add-ons: '+rec.addons.join(', '):'')+(rec.support?', plus update support at $29/month':'')+'. Project total '+rec.total+', with a '+rec.deposit+' deposit to begin and the '+rec.balance+' balance due when the customer approves the site.'),W);
+  var st=doc.splitTextToSize(clean('The customer named above agrees to the terms of this agreement with love ur website (Fred Ramon), as listed below, for the following order: Standard site ($500)'+(rec.addons&&rec.addons.length?' with add-ons: '+rec.addons.join(', '):'')+(rec.support?', plus update support at $29/month':'')+'. Project total '+rec.total+', with a '+rec.deposit+' deposit to begin and the '+rec.balance+' balance due when the customer approves the site.'),W);
   doc.text(st,L,y);y+=st.length*12.5+16;
   // terms
   doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Terms of this agreement',L,y);
   doc.setDrawColor(217,65,31);doc.setLineWidth(1.5);doc.line(L,y+5,L+56,y+5);y+=20;
-  var terms=[].map.call(document.querySelectorAll('.terms li'),function(li){return clean(li.textContent).replace(/\s*\(Wording for Fred to confirm\.\)/,'').replace(/love ur website/gi,'Love UR Website')});
+  var terms=[].map.call(document.querySelectorAll('.terms li'),function(li){return clean(li.textContent).replace(/\s*\(Wording for Fred to confirm\.\)/,'').replace(/love ur website/gi,'love ur website')});
   var BX=L+118;
   terms.forEach(function(t,i){
     var m=/^([^.]{1,40})\.\s*(.*)$/.exec(t),head=m?m[1]:'',body=m?m[2]:t;
