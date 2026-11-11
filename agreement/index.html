@@ -218,8 +218,15 @@ function makePdf(rec){
   y+=66+22;
   // statement
   doc.setFont('helvetica','normal');doc.setFontSize(10);ink();
-  var st=doc.splitTextToSize(clean('The customer named above agrees to the terms of this agreement with love ur website (Fred Ramon), as listed below, for the following order: Standard site ($500)'+(rec.addons&&rec.addons.length?' with add-ons: '+rec.addons.join(', '):'')+(rec.support?', plus update support at $29/month':'')+'. Project total '+rec.total+', with a '+rec.deposit+' deposit to begin and the '+rec.balance+' balance due when the customer approves the site.'),W);
-  doc.text(st,L,y);y+=st.length*12.5+16;
+  var stRest=clean(' (Fred Ramon), as listed below, for the following order: Standard site ($500)'+(rec.addons&&rec.addons.length?' with add-ons: '+rec.addons.join(', '):'')+(rec.support?', plus update support at $29/month':'')+'. Project total '+rec.total+', with a '+rec.deposit+' deposit to begin and the '+rec.balance+' balance due when the customer approves the site.');
+  var runs=[['The customer named above agrees to the terms of this agreement with ',false],['love ur website',true],[' '+stRest,false]];
+  var words=[];runs.forEach(function(r){r[0].split(/(\s+)/).forEach(function(w){if(w)words.push([w,r[1]])})});
+  var lx=L,lines=1;doc.setFontSize(10);ink();
+  words.forEach(function(w){doc.setFont('helvetica',w[1]?'bold':'normal');var ww=doc.getTextWidth(w[0]);
+    if(/^\s+$/.test(w[0])){if(lx>L)lx+=ww;return}
+    if(lx+ww>R&&lx>L){lx=L;y+=12.5;lines++}
+    doc.text(w[0],lx,y);lx+=ww});
+  doc.setFont('helvetica','normal');y+=12.5+16;
   // terms
   doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Terms of this agreement',L,y);
   doc.setDrawColor(217,65,31);doc.setLineWidth(1.5);doc.line(L,y+5,L+56,y+5);y+=20;
