@@ -68,7 +68,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <div class="done" id="done" tabindex="-1" role="status">
 <div class="card">
 <h2>&#10003; Thank you for your business!</h2>
-<p>We'll get to work. You'll hear from me soon about next steps. A confirmation with your agreement is on its way to <b id="d_mail"></b>.</p>
+<p>We'll get to work. You'll hear from me soon about next steps. A confirmation with your agreement, including a PDF copy, is on its way to <b id="d_mail"></b>.</p>
 <p class="note">It can take a minute, and may land in spam. You can also download a PDF copy below.</p>
 <div class="ref" id="d_ref"></div>
 <a class="btn" id="d_pdf" download target="_blank" rel="noopener" style="display:none;text-decoration:none;margin-top:8px">Download your agreement PDF</a>
@@ -313,13 +313,21 @@ $('f').addEventListener('submit',async function(e){
   try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(__){}}
   m.textContent='Sending your agreement... one moment.';show(m);
   rec.terms=termsText();
+  var emailed=false;
   try{
     var ac=new AbortController();
-    var t=setTimeout(function(){ac.abort()},8000);
-    await fetch('https://loveur-agreements.ramon-net.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec),signal:ac.signal});
+    var t=setTimeout(function(){ac.abort()},45000);
+    var res=await fetch('https://loveur-agreements.ramon-net.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec),signal:ac.signal});
     clearTimeout(t);
+    var body=null;try{body=await res.json()}catch(_){}
+    emailed=!!(res.ok&&body&&body.emailed);
   }catch(_){}
-  sendIt(rec);
+  if(emailed){
+    try{history.replaceState(null,'',location.pathname+'?sent='+encodeURIComponent(rec.id))}catch(_){}
+    render(rec);
+  }else{
+    sendIt(rec);
+  }
  }catch(err){
   m.textContent='Something went wrong on this page ('+err.message+'). Please tell Fred.';show(m);
  }
