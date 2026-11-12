@@ -22,7 +22,6 @@ p{margin:0 0 1em}
 .top svg{width:28px;height:28px;flex:none}
 .top a{color:#fff;text-decoration:none;white-space:nowrap}
 .intro{padding:34px 0 8px}
-.draft{background:#fff8d6;border:2px dashed #c9a400;border-radius:12px;padding:12px 16px;font-size:.95rem;margin-bottom:22px}
 section{padding:22px 0}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
 .note{font-size:.95rem;color:var(--muted)}
@@ -62,7 +61,6 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 
 <main class="wrap">
 <div class="intro" id="intro">
-<div class="draft"><b>TEST MODE.</b> This page is for Fred's review and practice runs only, not for real clients yet. Amounts and wording are a starting point. Anything submitted is marked TEST. Submitting emails a copy to you and to Fred; nothing is charged.</div>
 <h1 id="h1">Website agreement</h1>
 <p id="lede">Please read the terms, choose your options, and sign at the bottom. It takes about five minutes. Nothing is charged on this page.</p>
 </div>
@@ -70,9 +68,10 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <div class="done" id="done" tabindex="-1" role="status">
 <div class="card">
 <h2>&#10003; Thank you for your business!</h2>
-<p>We'll get to work. You'll hear from me soon about next steps. A copy of your agreement is on its way to <b id="d_mail"></b>.</p>
-<p class="note"><b>TEST MODE:</b> nothing was charged. Check your email for your copy (it can take a minute, and may land in spam).</p>
+<p>We'll get to work. You'll hear from me soon about next steps. A confirmation with your agreement is on its way to <b id="d_mail"></b>.</p>
+<p class="note">It can take a minute, and may land in spam. You can also download a PDF copy below.</p>
 <div class="ref" id="d_ref"></div>
+<a class="btn" id="d_pdf" download target="_blank" rel="noopener" style="display:none;text-decoration:none;margin-top:8px">Download your agreement PDF</a>
 <dl id="d_sum"></dl>
 <div id="d_sigwrap" style="display:none;margin-top:14px"><p class="note" style="margin:0 0 6px"><b>Drawn signature</b></p><img id="d_sig" alt="Drawn signature" style="width:100%;max-width:420px;border:1px solid var(--line);border-radius:10px;background:#fff"></div>
 <button type="button" class="btn" id="again">Start over</button>
@@ -126,7 +125,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <li><b>Wix and domain costs.</b> Your Wix plan and domain are paid to Wix or the registrar directly, and prices are set by them.</li>
 <li><b>What isn't included.</b> A custom-coded app, a full online store, or any promise of a particular Google ranking.</li>
 <li><b>Your materials.</b> You confirm you have the right to use the text, photos, and logo you provide.</li>
-<li><b>Cancelling.</b> If you cancel before work starts, the deposit is refunded. After work starts, the deposit covers the work already done. <i>(Wording for Fred to confirm.)</i></li>
+<li><b>Cancelling.</b> If you cancel before work starts, the deposit is refunded. After work starts, the deposit covers the work already done.</li>
 </ol>
 </div>
 </section>
@@ -153,7 +152,7 @@ footer{padding:30px 0 50px;color:var(--muted);font-size:.95rem}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/4.2.1/jspdf.umd.min.js" integrity="sha512-plOdviVmws4Y3JAvbnpfKb2hVxKM1lCwsi3vmElYRj+tiDLffZ4FVUj5a8vyKJ9pIgl8JCAHEJ4D1iUKBecswg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 (function(){
-var DEP_PCT=50; // deposit percent: Fred to confirm
+var DEP_PCT=50;
 var $=function(i){return document.getElementById(i)};
 var money=function(n){return '$'+n.toLocaleString('en-US')};
 $('today').textContent=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
@@ -176,6 +175,22 @@ c.addEventListener('pointermove',function(e){if(!draw)return;var p=pt(e);x.lineT
 ['pointerup','pointercancel'].forEach(function(t){c.addEventListener(t,function(){draw=false})});
 $('clr').addEventListener('click',function(){x.clearRect(0,0,c.width,c.height);drawn=false});
 function show(el){el.style.display='block';try{el.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){el.scrollIntoView(true)}}
+function bindPdf(rec){
+  var a=$('d_pdf');
+  if(!a)return;
+  var pdf=rec.agreementPdf;
+  if(!pdf){try{pdf=makePdf(rec);rec.agreementPdf=pdf}catch(_){pdf=null}}
+  if(!pdf){a.style.display='none';a.removeAttribute('href');return}
+  try{
+    var b64=pdf.split(',')[1],bin=atob(b64),u=new Uint8Array(bin.length);
+    for(var k=0;k<bin.length;k++)u[k]=bin.charCodeAt(k);
+    if(window._pdfUrl)URL.revokeObjectURL(window._pdfUrl);
+    window._pdfUrl=URL.createObjectURL(new Blob([u],{type:'application/pdf'}));
+    a.href=window._pdfUrl;
+  }catch(_){a.href=pdf}
+  a.download=rec.id+'-agreement.pdf';
+  a.style.display='inline-flex';
+}
 function render(rec){
   $('d_ref').textContent='Reference: '+rec.id;
   var rows=[['Business',rec.business],['Name',rec.name],['Email',rec.email],['Phone',rec.phone],['Add-ons',rec.addons.length?rec.addons.join(', '):'None'],['Update support',rec.support?'Yes, $29/mo':'No'],['Project total',rec.total],['Deposit',rec.deposit],['Balance',rec.balance],['Signed as',rec.signedAs+(rec.drawn?' (and drawn signature)':'')],['Date',rec.date]];
@@ -183,7 +198,8 @@ function render(rec){
   rows.forEach(function(r){var dt=document.createElement('dt'),dd=document.createElement('dd');dt.textContent=r[0];dd.textContent=r[1];$('d_sum').appendChild(dt);$('d_sum').appendChild(dd)});
   if(rec.signatureImage){$('d_sig').src=rec.signatureImage;$('d_sigwrap').style.display='block'}else{$('d_sigwrap').style.display='none'}
   $('d_mail').textContent=rec.email;
-  $('f').style.display='none';$('h1').style.display='none';$('lede').style.display='none';
+  bindPdf(rec);
+  $('f').style.display='none';$('intro').style.display='none';
   var d=$('done');d.style.display='block';window.scrollTo(0,0);try{d.focus({preventScroll:true})}catch(_){}
 }
 function termsText(){return [].map.call(document.querySelectorAll('.terms li'),function(li,i){return (i+1)+'. '+li.textContent.replace(/\s+/g,' ').trim()}).join('\n')}
@@ -290,11 +306,11 @@ $('f').addEventListener('submit',async function(e){
    show(m);if(need.length)$(need[0]).focus();return;
   }
   m.style.display='none';
-  var rec={mode:'TEST',id:'TEST-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
+  var rec={mode:'LIVE',id:'LYW-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
   rec.signatureImage=drawn?sigSmall():null;
   rec.signedAt=new Date().toLocaleString('en-US',{timeZone:'America/New_York',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
   try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
-  try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(_){}
+  try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(__){}}
   m.textContent='Sending your agreement... one moment.';show(m);
   rec.terms=termsText();
   try{
@@ -309,7 +325,7 @@ $('f').addEventListener('submit',async function(e){
  }
 });
 $('again').addEventListener('click',function(){
- history.replaceState(null,'',location.pathname);$('f').reset();calc();$('done').style.display='none';$('f').style.display='block';$('h1').style.display='';$('lede').style.display='';$('msg').style.display='none';
+ history.replaceState(null,'',location.pathname);$('f').reset();calc();$('done').style.display='none';$('f').style.display='block';$('intro').style.display='';$('msg').style.display='none';if(window._pdfUrl){URL.revokeObjectURL(window._pdfUrl);window._pdfUrl=null}
  size();window.scrollTo(0,0);
 });
 })();
