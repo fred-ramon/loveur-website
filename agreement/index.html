@@ -306,7 +306,7 @@ $('f').addEventListener('submit',async function(e){
    show(m);if(need.length)$(need[0]).focus();return;
   }
   m.style.display='none';
-  var rec={mode:'LIVE',id:'LYW-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
+  var rec={mode:'LIVE',id:'LUW-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
   rec.signatureImage=drawn?sigSmall():null;
   rec.signedAt=new Date().toLocaleString('en-US',{timeZone:'America/New_York',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
   try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
