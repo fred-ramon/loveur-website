@@ -257,7 +257,7 @@ function makePdf(rec){
   // signature block
   y+=6;doc.setDrawColor(226,221,210);doc.setLineWidth(1);doc.line(L,y,R,y);y+=18;
   doc.setFont('helvetica','bold');doc.setFontSize(11.5);doc.setTextColor(20,33,61);doc.text('Customer signature',L,y);
-  doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();doc.text('The customer typed their full name as their signature.',L,y+12);y+=22;
+  doc.setFont('helvetica','normal');doc.setFontSize(8.5);muted();var sigNote=doc.splitTextToSize('The customer provided an e-signature and entered their full name on the agreement form.',W);doc.text(sigNote,L,y+12);y+=12+sigNote.length*11+6;
   var top=y,sh=0;
   if(rec.signatureImage){var props=doc.getImageProperties(rec.signatureImage),w=220,h=props.height*w/props.width;if(h>58){h=58;w=props.width*h/props.height}doc.addImage(rec.signatureImage,'PNG',L,y,w,h);sh=h}
   else{doc.setFont('times','italic');doc.setFontSize(20);ink();doc.text(clean(rec.signedAs),L,y+34);sh=40}
