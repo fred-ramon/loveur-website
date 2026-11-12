@@ -266,7 +266,7 @@ function makePdf(rec){
   var cx=L+290;doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAs),cx,top+18);doc.line(cx,top+24,R,top+24);doc.setFontSize(8.5);muted();doc.text('Typed full name',cx,top+35);
   doc.setFontSize(10.5);ink();doc.text(clean(rec.signedAt||rec.date||''),cx,ly-6);doc.line(cx,ly,R,ly);doc.setFontSize(8.5);muted();doc.text('Date signed',cx,ly+11);
   y=ly+11;
-  y+=22;doc.setFont('helvetica','italic');doc.setFontSize(9);muted();doc.text('Signed electronically on loveur.website/agreement. The customer clicked "I agree."',L,y);
+  y+=22;doc.setFont('helvetica','italic');doc.setFontSize(9);muted();var eSign=doc.splitTextToSize('Signed electronically on loveur.website/agreement. The customer clicked "I have read and agree to these terms and the payment schedule."',W);doc.text(eSign,L,y);y+=eSign.length*11;
   if(doc.getNumberOfPages()>1||y>792-44){/* safety: should never happen */}
   var n=doc.getNumberOfPages();for(var p=1;p<=n;p++){doc.setPage(p);footer()}
   return doc.output('datauristring');
