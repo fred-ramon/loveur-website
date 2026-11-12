@@ -277,6 +277,25 @@ function attachFile(f,dataUrl,name,type,field){
   var fi=document.createElement('input');fi.type='file';fi.name=field;fi.files=dt.files;f.appendChild(fi);
 }
 function sigSmall(){var w=Math.min(600,c.width),h=Math.round(c.height*w/c.width),o=document.createElement('canvas');o.width=w;o.height=h;var g=o.getContext('2d');g.drawImage(c,0,0,w,h);return o.toDataURL('image/png')}
+async function nextRef(mode){
+  var ac=new AbortController();
+  var t=setTimeout(function(){ac.abort()},15000);
+  try{
+    var res=await fetch('https://loveur-agreements.ramon-net.workers.dev/next-id',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:mode||'LIVE'}),signal:ac.signal});
+    var body=null;try{body=await res.json()}catch(_){}
+    if(res.ok&&body&&body.id)return body.id;
+    throw new Error((body&&body.error)||'Could not get a reference number.');
+  }finally{clearTimeout(t)}
+}
+async function storeAgreement(rec){
+  var ac=new AbortController();
+  var t=setTimeout(function(){ac.abort()},45000);
+  try{
+    var res=await fetch('https://loveur-agreements.ramon-net.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec),signal:ac.signal});
+    var body=null;try{body=await res.json()}catch(_){}
+    return {res:res,body:body};
+  }finally{clearTimeout(t)}
+}
 function sendIt(rec){
   var f=document.createElement('form');f.method='POST';f.action='https://formsubmit.co/fred@ramon.net';f.enctype='multipart/form-data';f.style.display='none';
   var add=function(n,v){var i=document.createElement(n==='_autoresponse'||n==='Terms'||n==='Summary'?'textarea':'input');if(i.tagName==='INPUT')i.type='hidden';i.name=n;i.value=v;f.appendChild(i)};
@@ -306,21 +325,24 @@ $('f').addEventListener('submit',async function(e){
    show(m);if(need.length)$(need[0]).focus();return;
   }
   m.style.display='none';
-  var rec={mode:'LIVE',id:'LUW-'+Date.now(),business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
+  m.textContent='Sending your agreement... one moment.';show(m);
+  var rec={mode:'LIVE',id:'',business:$('biz').value.trim(),name:$('name').value.trim(),email:$('email').value.trim(),phone:$('phone').value.trim(),signedAs:$('typed').value.trim(),drawn:drawn,addons:[].map.call(document.querySelectorAll('.addon:checked'),function(a){return a.value}),support:$('support').checked,total:$('tot').textContent,deposit:$('dep').textContent,balance:$('bal').textContent,date:$('today').textContent};
   rec.signatureImage=drawn?sigSmall():null;
   rec.signedAt=new Date().toLocaleString('en-US',{timeZone:'America/New_York',year:'numeric',month:'long',day:'numeric',hour:'numeric',minute:'2-digit'})+' ET';
+  rec.id=await nextRef(rec.mode);
   try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
   try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){try{var stored=Object.assign({},rec);delete stored.agreementPdf;sessionStorage.setItem('luw_last',JSON.stringify(stored))}catch(__){}}
-  m.textContent='Sending your agreement... one moment.';show(m);
   rec.terms=termsText();
   var emailed=false;
   try{
-    var ac=new AbortController();
-    var t=setTimeout(function(){ac.abort()},45000);
-    var res=await fetch('https://loveur-agreements.ramon-net.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(rec),signal:ac.signal});
-    clearTimeout(t);
-    var body=null;try{body=await res.json()}catch(_){}
-    emailed=!!(res.ok&&body&&body.emailed);
+    var out=await storeAgreement(rec);
+    if(out.res&&out.res.status===409){
+      rec.id=await nextRef(rec.mode);
+      try{rec.agreementPdf=makePdf(rec)}catch(_){rec.agreementPdf=null}
+      try{sessionStorage.setItem('luw_last',JSON.stringify(rec))}catch(_){}
+      out=await storeAgreement(rec);
+    }
+    emailed=!!(out.res&&out.res.ok&&out.body&&out.body.emailed);
   }catch(_){}
   if(emailed){
     try{history.replaceState(null,'',location.pathname+'?sent='+encodeURIComponent(rec.id))}catch(_){}
